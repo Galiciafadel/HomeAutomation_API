@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+
 const equipmentSchema = new Schema({
     current: {
         type: String,
@@ -24,6 +25,6 @@ const equipmentSchema = new Schema({
     timestamps: true
 });
 
-var Apartments = mongoose.model('Apartment', apartmentSchema);
+var Equipment = mongoose.model('Equipment', equipmentSchema);
 
-module.exports = Apartments;
+//module.exports = Equipment;
