@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const equipmentSchema=require('../schemas/equipment');
 //const User=require('../schemas/user');
 
-const User = mongoose.Schema({
+const User = new Schema({
     username: {
         type: String,
         required: true
@@ -35,7 +35,7 @@ const roomSchema = new Schema({
         type: String,
         required: true
     },
-    adresse:{
+    address:{
         type: String,
         required:true
 
@@ -62,13 +62,13 @@ const apartmentSchema = new Schema({
         ref: 'ApartmentsType'
     },
     rooms:[roomSchema],
-    user:[User]
+    users:[User]
 },{
     timestamps: true
 });
 
 
 
-var Apartments = mongoose.model('Apartment', apartmentSchema);
+let apartments = mongoose.model('Apartment', apartmentSchema);
 
-module.exports = Apartments;
+module.exports = apartments;
