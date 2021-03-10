@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const Apartments = require('../schemas/apartments');
+let ObjectId = require('mongodb').ObjectID;
 
 const apartmentRouter = express.Router();
 
@@ -21,7 +22,7 @@ apartmentRouter.route('/')
             .catch((err) => next(err));
     })
     .post((req, res, next) => {
-        req.body.apartmentTypeId = new ObjectId(req.body.apartmentTypeId)
+        req.body.apartmentTypeId = new ObjectId(req.body.apartmentTypeId);
         Apartments.create(req.body)
             .then((apartment) => {
                 console.log('Apartment Created ', apartment);

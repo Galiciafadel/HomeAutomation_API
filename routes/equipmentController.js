@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const Equipment = require('../schemas/equipment');
+const EquipmentType = require("../schemas/equipmentType");
 //const {ObjectId} = require("bson").ObjectID;
 let ObjectId = require('mongodb').ObjectID;
 
@@ -21,9 +22,9 @@ equipmentRouter.route('/')
             .catch((err) => next(err));
     })
     .post((req, res, next) => {
-        req.body.equipmentTypeId = new ObjectId(req.body.equipmentTypeId)
+        req.body.equipmentTypeId = new ObjectId(req.body.equipmentTypeId);
         Equipment.create(req.body)
-            .populate('equipmentTypeId')
+            //.populate('equipmentTypeId')
             .then((equipment) => {
                 console.log('Equipment Created ', equipment);
                 res.statusCode = 200;
