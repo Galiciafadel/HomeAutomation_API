@@ -1,50 +1,19 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const equipmentSchema=require('../schemas/equipment');
-//const User=require('../schemas/user');
-
-const User = new Schema({
-    username: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    firstname: {
-        type: String,
-        required: true
-    },
-    lastname: {
-        type: String,
-        required: true
-    },
-    isAdmin: {
-        type: Boolean,
-        default:false
-    },
-});
 
 const roomSchema = new Schema({
-    current: {
+    name: {
         type: String,
         required: true
-    },
-    status: {
-        type: String,
-        required: true
-    },
-    address:{
-        type: String,
-        required:true
-
     },
     roomTypeId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'RoomsType'
     },
-    equipment:[equipmentSchema]
+    equipment:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Equipment'
+    }]
 
 },{
     timestamps: true
@@ -62,12 +31,13 @@ const apartmentSchema = new Schema({
         ref: 'ApartmentsType'
     },
     rooms:[roomSchema],
-    users:[User]
+    users:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }]
 },{
     timestamps: true
 });
-
-
 
 let apartments = mongoose.model('Apartment', apartmentSchema);
 

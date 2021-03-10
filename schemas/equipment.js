@@ -1,17 +1,21 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
+const {MongoClient, ObjectID}= require('mongodb');
 
 const equipmentSchema = new Schema({
+    goal: {
+        type: Number,
+        required: true
+    },
     current: {
-        type: String,
+        type: Number,
         required: true
     },
-    status: {
-        type: String,
+    turnedOn: {
+        type: Boolean,
         required: true
     },
-    adresse:{
+    networkAddress:{
         type: String,
         required:true
 
@@ -25,6 +29,6 @@ const equipmentSchema = new Schema({
     timestamps: true
 });
 
-var Equipment = mongoose.model('Equipment', equipmentSchema);
+let equipment = mongoose.model('Equipment', equipmentSchema);
 
-//module.exports = Equipment;
+module.exports = equipment;

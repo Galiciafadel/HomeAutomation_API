@@ -15,6 +15,6 @@ const apartmentTypeSchema = new Schema({
     timestamps: true
 });
 
-var ApartmentsType = mongoose.model('ApartmentType', apartmentTypeSchema);
+var apartmentsType = mongoose.model('ApartmentType', apartmentTypeSchema);
 
-module.exports = ApartmentsType;
+module.exports = apartmentsType;

@@ -5,8 +5,6 @@ const mongoose = require('mongoose');
 const Apartments = require('../schemas/apartments');
 
 const apartmentRouter = express.Router();
-//var authenticate = require('../authenticate');
-
 
 apartmentRouter.use(bodyParser.json());
 
@@ -23,6 +21,7 @@ apartmentRouter.route('/')
             .catch((err) => next(err));
     })
     .post((req, res, next) => {
+        req.body.apartmentTypeId = new ObjectId(req.body.apartmentTypeId)
         Apartments.create(req.body)
             .then((apartment) => {
                 console.log('Apartment Created ', apartment);
@@ -50,10 +49,10 @@ apartmentRouter.route('/:apartmentId')
     .get((req,res,next) => {
         Apartments.findById(req.params.apartmentId)
             .populate('rooms.roomsTypeId')
-            .then((dish) => {
+            .then((apartment) => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
-                res.json(dish);
+                res.json(apartment);
             }, (err) => next(err))
             .catch((err) => next(err));
     })
@@ -69,7 +68,7 @@ apartmentRouter.route('/:apartmentId')
 
 apartmentRouter.route('/:apartmentId/rooms')
     .get((req,res,next) => {
-        Apartments.findById(req.params.dishId)
+        Apartments.findById(req.params.apartmentId)
             .populate('rooms.roomTypeId')
             .then((apartment) => {
                 if (apartment != null && apartment.rooms.id(req.params.roomId) != null) {
@@ -91,6 +90,7 @@ apartmentRouter.route('/:apartmentId/rooms')
             .catch((err) => next(err));
     })
     .post((req, res, next) => {
+        req.body.apartmentTypeId = new ObjectId(req.body.apartmentTypeId)
         Apartments.findById(req.params.apartmentId)
             .then((apartment) => {
                 if (apartment != null) {
@@ -125,10 +125,10 @@ apartmentRouter.route('/:apartmentId/rooms')
                         .then((apartment) => {
                             Apartments.findById(apartment._id)
                                 .populate('rooms.roomTypeId')
-                                .then((dish) => {
+                                .then((apartment) => {
                                     res.statusCode = 200;
                                     res.setHeader('Content-Type', 'application/json');
-                                    res.json(dish);
+                                    res.json(apartment);
                                 })
                         }, (err) => next(err));
                 }
