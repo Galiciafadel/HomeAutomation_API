@@ -15,7 +15,6 @@ apartmentRouter.route('/')
         Apartments.find({})
             .populate('rooms.roomsTypeId')
             .then((apartments) => {
-                console.log('Hello');
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
                 res.json(apartments);
@@ -37,15 +36,6 @@ apartmentRouter.route('/')
         res.statusCode = 403;
         res.end('PUT operation not supported on /apartments');
     })
-    .delete( (req, res, next) => {
-        Apartments.remove({})
-            .then((resp) => {
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'application/json');
-                res.json(resp);
-            }, (err) => next(err))
-            .catch((err) => next(err));
-    });
 
 apartmentRouter.route('/:apartmentId')
     .get((req,res,next) => {
@@ -66,7 +56,15 @@ apartmentRouter.route('/:apartmentId')
         res.statusCode = 403;
         res.end('PUT operation not supported on /apartments/'+ req.params.apartmentId);
     })
-
+    .delete((req, res, next) => {
+        Apartments.findByIdAndRemove(req.params.apartmentId)
+            .then((resp) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(resp);
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    });
 
 apartmentRouter.route('/:apartmentId/rooms')
     .get((req,res,next) => {
@@ -197,16 +195,9 @@ apartmentRouter.route('/:apartmentId/rooms/:roomId')
             .catch((err) => next(err));
     })
     .delete((req, res, next) => {
-        Apartments.findById(req.params.roomId)
+        Apartments.findById(req.params.apartmentId)
             .then((apartment) => {
                 if (apartment != null && apartment.rooms.id(req.params.roomId) != null) {
-
-                    if (apartment.rooms.id(req.params.roomId).roomTypeId.equals(req.user._id)===false) {
-                        err = new Error('You are not authorized to delete this room');
-                        err.status = 403;
-                        return next(err);
-                    }
-
                     apartment.rooms.id(req.params.roomId).remove();
                     apartment.save()
                         .then((apartment) => {
@@ -216,7 +207,7 @@ apartmentRouter.route('/:apartmentId/rooms/:roomId')
                         }, (err) => next(err));
                 }
                 else if (apartment == null) {
-                    err = new Error('Apartment ' + req.params.roomId + ' not found');
+                    err = new Error('Apartment ' + req.params.apartmentId + ' not found');
                     err.status = 404;
                     return next(err);
                 }
