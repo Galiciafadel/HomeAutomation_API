@@ -8,13 +8,12 @@ const roomSchema = new Schema({
     },
     roomTypeId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'RoomsType'
+        ref: 'RoomType'
     },
     equipment:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Equipment'
     }]
-
 },{
     timestamps: true
 });
@@ -31,6 +30,7 @@ const apartmentSchema = new Schema({
         ref: 'ApartmentsType'
     },
     rooms:[roomSchema],
+
     users:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
