@@ -7,9 +7,14 @@ const equipmentSchema = new Schema({
         type: Number,
         required: true
     },
-    current: {
+    actual: {
         type: Number,
         required: true
+    },
+    auto:{
+        type: Boolean,
+        required: false,
+        default: false
     },
     turnedOn: {
         type: Boolean,

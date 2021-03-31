@@ -53,8 +53,18 @@ apartmentRouter.route('/:apartmentId')
         res.end('POST operation not supported on /apartments/'+ req.params.apartmentId);
     })
     .put((req, res, next) => {
-        res.statusCode = 403;
-        res.end('PUT operation not supported on /apartments/'+ req.params.apartmentId);
+        Apartments.findById(req.params.apartmentId, (err, doc) => {
+            let users = doc.users;
+            users.push(req.body.user);
+            doc.save();
+
+        }, { new: true })
+            .then((apartment) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(apartment);
+            }, (err) => next(err))
+            .catch((err) => next(err));
     })
     .delete((req, res, next) => {
         Apartments.findByIdAndRemove(req.params.apartmentId)
@@ -174,7 +184,7 @@ apartmentRouter.route('/:apartmentId/rooms/:roomId')
                     if (req.body.equipment) {
                         apartment.rooms.id(req.params.roomId).equipment = req.body.equipment;
                     }
-                    apartment.save()
+                    apartment.save()``
                         .then((apartment) => {
                             res.statusCode = 200;
                             res.setHeader('Content-Type', 'application/json');

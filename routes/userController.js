@@ -5,14 +5,15 @@ const Bcrypt = require('bcryptjs');
 const responseHandler = require('../services/responseHandler');
 
 //ROUTES
-router.get('/',  (req, res) => {
-    try{
-        const users =  User.find();
-        res.json(users).status(200);
-    }
-    catch(err){
-        res.json({message: "Error " + err}).status(500);
-    }
+router.get('/',  (req, res, next) => {
+
+    User.find({}).then(users => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(users)})
+        .catch(err => next(err));
+
+
 });
 
 router.post('/login', (req, res) => {
@@ -58,6 +59,15 @@ router.post('/',  (req, res) => {
         res.json({message: err});
     }
 
+});
+router.delete('/:userId', (req, res, next) => {
+    User.findByIdAndRemove(req.params.userId)
+        .then((resp) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(resp);
+        }, (err) => next(err))
+        .catch((err) => next(err));
 });
 
 
