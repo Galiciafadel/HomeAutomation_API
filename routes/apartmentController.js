@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-
+mongoose.set('useFindAndModify', false);
 const Apartments = require('../schemas/apartments');
 
 let ObjectId = require('mongodb').ObjectID;
@@ -173,10 +173,10 @@ apartmentRouter.route('/:apartmentId/rooms/:roomId')
             .catch((err) => next(err));
     })
     .post((req, res, next) => {
-            res.statusCode = 403;
-            res.end('POST operation not supported on /apartments/'+ req.params.apartmentId
-                + '/rooms/' + req.params.roomId);
-        })
+        res.statusCode = 403;
+        res.end('POST operation not supported on /apartments/'+ req.params.apartmentId
+            + '/rooms/' + req.params.roomId);
+    })
     .put((req, res, next) => {
         Apartments.findById(req.params.apartmentId)
             .then((apartment) => {
@@ -184,7 +184,7 @@ apartmentRouter.route('/:apartmentId/rooms/:roomId')
                     if (req.body.equipment) {
                         apartment.rooms.id(req.params.roomId).equipment = req.body.equipment;
                     }
-                    apartment.save()``
+                    apartment.save()
                         .then((apartment) => {
                             res.statusCode = 200;
                             res.setHeader('Content-Type', 'application/json');

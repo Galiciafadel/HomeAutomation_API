@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../schemas/User');
+const User = require('../schemas/user');
 const Bcrypt = require('bcryptjs');
 const responseHandler = require('../services/responseHandler');
 
@@ -16,26 +16,31 @@ router.get('/',  (req, res, next) => {
 
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', (req, res, next) => {
     try{
-        const user = User.findOne({ username: req.body.username });
-        let authResponse = {};
+        User.findOne({ username: req.body.username }).then(user => {
+            let authResponse = {};
 
-        if(!user) {
-            authResponse = responseHandler.handleResponse(null, 404, false, 'user not found, wrong username');
-            res.send(authResponse).status(404);
-            return ;
-        }
+            if(!user) {
+                authResponse = responseHandler.handleResponse(null, 404, false, 'user not found, wrong username');
+                res.send(authResponse).status(404);
+                return ;
+            }
 
-        const hash = Bcrypt.compare(req.body.password, user.password);
-        if(!hash){
-            authResponse = responseHandler.handleResponse(null, 404, false, 'user not found, wrong password');
-            res.send(authResponse).status(404);
-            return ;
-        }
+            Bcrypt.compare(req.body.password, user.password).then(
+                hash => {
+                    if(!hash){
+                        authResponse = responseHandler.handleResponse(null, 404, false, 'user not found, wrong password');
+                        res.send(authResponse).status(404);
+                        return ;
+                    }
 
-        authResponse = responseHandler.handleResponse(user, 200, true, 'user found');
-        res.send(authResponse).status(200);
+                    authResponse = responseHandler.handleResponse(user, 200, true, 'user found');
+                    res.send(authResponse).status(200);
+                })
+        })
+            .catch(err => next(err));
+
     }
     catch(err){
         res.status(500).json({message: err});
@@ -53,13 +58,15 @@ router.post('/',  (req, res) => {
     });
     try{
         const savedUser = user.save();
-        res.json(savedUser);
+        res.json(user);
     }
     catch(err){
         res.json({message: err});
     }
 
 });
+
+
 router.delete('/:userId', (req, res, next) => {
     User.findByIdAndRemove(req.params.userId)
         .then((resp) => {
@@ -69,6 +76,5 @@ router.delete('/:userId', (req, res, next) => {
         }, (err) => next(err))
         .catch((err) => next(err));
 });
-
 
 module.exports = router;

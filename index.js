@@ -9,7 +9,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const hostname = 'localhost';
-const port = 3000;
+const port = 3444;
 
 //Import Routes
 const apartmentsRoutes=require('./routes/apartmentController');
