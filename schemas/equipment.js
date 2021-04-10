@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const {MongoClient, ObjectID}= require('mongodb');
 
 const equipmentSchema = new Schema({
     goal: {
@@ -28,7 +27,12 @@ const equipmentSchema = new Schema({
     equipmentTypeId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'EquipmentType'
-    }
+    },
+    room:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Room'
+    },
+
 
 },{
     timestamps: true

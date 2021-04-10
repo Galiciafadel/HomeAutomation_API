@@ -15,6 +15,6 @@ const equipmentTypeSchema = new Schema({
     timestamps: true
 });
 
-var EquipmentType = mongoose.model('EquipmentType', equipmentTypeSchema);
+let EquipmentsType = mongoose.model('EquipmentType', equipmentTypeSchema);
 
-module.exports = EquipmentType;
+module.exports = EquipmentsType;

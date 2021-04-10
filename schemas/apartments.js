@@ -1,22 +1,22 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const roomSchema = new Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    roomTypeId:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'RoomType'
-    },
-    equipment:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Equipment'
-    }]
-},{
-    timestamps: true
-});
+// const roomSchema = new Schema({
+//     name: {
+//         type: String,
+//         required: true
+//     },
+//     roomTypeId:{
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: 'RoomType'
+//     },
+//     equipment:[{
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: 'Equipment'
+//     }]
+// },{
+//     timestamps: true
+// });
 
 
 const apartmentSchema = new Schema({
@@ -27,9 +27,9 @@ const apartmentSchema = new Schema({
     },
     apartmentTypeId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'ApartmentsType'
+        ref: 'ApartmentType'
     },
-    rooms:[roomSchema],
+    // rooms:[roomSchema],
 
     users:[{
         type: mongoose.Schema.Types.ObjectId,

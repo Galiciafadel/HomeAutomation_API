@@ -24,7 +24,6 @@ equipmentRouter.route('/')
     .post((req, res, next) => {
         req.body.equipmentTypeId = new ObjectId(req.body.equipmentTypeId);
         Equipment.create(req.body)
-            //.populate('equipmentTypeId')
             .then((equipment) => {
                 console.log('Equipment Created ', equipment);
                 res.statusCode = 200;
